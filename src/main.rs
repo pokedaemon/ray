@@ -1,5 +1,6 @@
 mod vec3;
 mod color;
+mod ray;
 
 use std::io::{stdout, BufWriter, Write};
 use std::fs::{File};
