@@ -35,6 +35,10 @@ impl Vec3 {
     pub fn length(&self) -> f32 {
         self.length_squared().sqrt()
     }
+
+    pub fn unit_vector(v: Self) -> Self {
+        v / v.length()
+    }
 }
 
 impl std::ops::Sub for Vec3 {
@@ -66,6 +70,14 @@ impl std::ops::Mul<f32> for Vec3 {
 
     fn mul(self, rhs: f32) -> Self::Output {
         Vec3(self.0 * rhs, self.1 * rhs, self.2 * rhs)
+    }
+}
+
+impl std::ops::Div<f32> for Vec3 {
+    type Output = Vec3;
+
+    fn div(self, rhs: f32) -> Self::Output {
+        self * (1.0 / rhs)
     }
 }
 

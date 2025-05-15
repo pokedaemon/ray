@@ -1,11 +1,11 @@
 use crate::vec3::{Point3, Vec3};
 
-struct ray {
+pub struct Ray {
     origin: Point3,
     direction: Vec3
 }
 
-impl ray {
+impl Ray {
     pub fn with(origin: &Point3, direction: &Vec3) -> Self {
         Self {
             origin: *origin,
