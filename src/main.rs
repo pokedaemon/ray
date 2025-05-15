@@ -1,5 +1,12 @@
+mod vec3;
+mod color;
+
 use std::io::{stdout, BufWriter, Write};
 use std::fs::{File};
+
+use color::{Color, write_color};
+
+// TODO: Can I write to file without buffer and make it perfomance?
 
 fn main() {
     // Graphic Hello World
@@ -22,29 +29,30 @@ fn main() {
         }
     };
 
-    // create here our scalers
-    let mut r: f64 = 0.0;
-    let mut g: f64 = 0.0;
-    let mut b: f64 = 0.0;
-
-    // buffer our
+    // buffer -> file
     let mut buf: String = String::with_capacity(500*1024*1024*8);
     buf += &format!("P3\n{IMAGE_WIDTH} {IMAGE_HEIGHT}\n255\n");
 
     // first -> width, second -> height. Filling to right bottom
     for j in 0..IMAGE_HEIGHT {
+        // this is in log
         write!(handle, "\rScanlines remaining: {} ", IMAGE_HEIGHT-j).unwrap();
+        // and necessary flush stdout
         handle.flush().unwrap();
+
         for i in 0..IMAGE_WIDTH {
-            r = i as f64 / (IMAGE_WIDTH-1) as f64;
-            g = j as f64 / (IMAGE_HEIGHT - 1) as f64;
-            b = 0.0;
+            let pixel_color = Color::with((
+                i as f32 / (IMAGE_WIDTH-1) as f32,
+                j as f32 / (IMAGE_HEIGHT-1) as f32,
+                0.0
+            ));
             
-            // in stdout. used ">>" operator for creating image
-            buf += &format!("{} {} {}\n", (r * 255.999) as u8, (g * 255.999) as u8, (b * 255.999) as u8);
+            // write color to buffer
+            write_color(pixel_color, &mut buf);
         }
     }
 
+    // write to file
     if let Err(e) = image_file.write(buf.as_bytes()) {
         eprintln!("Write to file error: {e}!");
     }
